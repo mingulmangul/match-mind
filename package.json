@@ -1,0 +1,35 @@
+{
+  "name": "match-mind",
+  "version": "1.0.0",
+  "description": "Catch Mind(Realtime Drawing Game) Clone built with SocketIO, Gulp and Node",
+  "main": "index.js",
+  "scripts": {
+    "dev:server": "nodemon --exec babel-node ./src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mingulmangul/match-mind.git"
+  },
+  "author": "mingulmangul <min2010011@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mingulmangul/match-mind/issues"
+  },
+  "homepage": "https://github.com/mingulmangul/match-mind#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pug": "^3.0.2",
+    "socket.io": "^4.1.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.8",
+    "@babel/node": "^7.14.7",
+    "@babel/preset-env": "^7.14.8",
+    "eslint": "^7.31.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.12",
+    "prettier": "^2.3.2"
+  }
+}
