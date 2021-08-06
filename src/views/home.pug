@@ -7,12 +7,15 @@ html(lang="en")
         link(rel="stylesheet", href="/css/styles.css")
         title Match Mind
     body 
-        div.login-box
+        .login-box
             form#loginForm
                 input(type="text" placeholder="What is your name?")
-        div.game-container
-            h1 You are logged in!!!
-            div.notifications
+        .game-container
+            .chat-box 
+                form#chatForm
+                    input(type="text" placeholder="Write your message!")
+                ul.chat 
+        .notifications
         script.
             window.events = !{events}
         script(src="/socket.io/socket.io.js") 

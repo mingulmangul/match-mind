@@ -9,8 +9,8 @@ const LOGGED_OUT = "logged-out";
 const login = (nickname) => {
   document.body.className = LOGGED_IN;
   const socket = io();
-  initSocket(socket);
   socket.emit(window.events.setNickname, { nickname });
+  initSocket(socket);
 };
 
 const nickname = localStorage.getItem(NICKNAME);

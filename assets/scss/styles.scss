@@ -4,10 +4,9 @@
 @import "reset.scss";
 
 // Components
-@import "notifications.scss";
-
-// Screen
+@import "chat.scss";
 @import "login.scss";
+@import "notifications.scss";
 
 * {
   box-sizing: border-box;
