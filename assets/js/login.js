@@ -1,3 +1,5 @@
+import { initSocket } from "./sockets";
+
 const loginForm = document.getElementById("loginForm");
 
 const NICKNAME = "nickname";
@@ -6,8 +8,9 @@ const LOGGED_OUT = "logged-out";
 
 const login = (nickname) => {
   document.body.className = LOGGED_IN;
-  window.socket = io();
-  window.socket.emit(window.events.setNickname, { nickname });
+  const socket = io();
+  initSocket(socket);
+  socket.emit(window.events.setNickname, { nickname });
 };
 
 const nickname = localStorage.getItem(NICKNAME);
