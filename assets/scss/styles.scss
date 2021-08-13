@@ -4,14 +4,10 @@
 @import "reset.scss";
 
 // Components
-@import "components/chat.scss";
 @import "components/header.scss";
-@import "components/notifications.scss";
 @import "components/paint.scss";
-
-// Screens
-@import "screens/login.scss";
-@import "screens/play.scss";
+@import "components/login.scss";
+@import "components/play.scss";
 
 * {
   box-sizing: border-box;
