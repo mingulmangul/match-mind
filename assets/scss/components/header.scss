@@ -1,0 +1,33 @@
+nav ul {
+  padding-top: 20px;
+  background: linear-gradient($pupleBlue 70%, rgba($pupleBlue, 0.7) 30%);
+  background-size: 100% 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  li:nth-child(2) {
+    width: 50%;
+  }
+  .logo {
+    justify-self: center;
+    color: pink;
+    font-size: 30px;
+  }
+  button {
+    cursor: pointer;
+    border: 2px solid $darkNavy;
+    border-bottom: none;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 10px 20px;
+    font-size: 22px;
+    background: linear-gradient(white 5%, pink 95%);
+  }
+}
+header + div {
+  border: 1px solid $darkNavy;
+  border-right: none;
+  border-left: none;
+  height: 22px;
+  background: linear-gradient($whiteBlue, $skyBlue, $whiteBlue);
+}

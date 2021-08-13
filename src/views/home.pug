@@ -7,16 +7,143 @@ html(lang="en")
         link(rel="stylesheet", href="/css/styles.css")
         title Match Mind
     body 
-        .login-box
-            form#loginForm
-                input(type="text" placeholder="What is your name?")
-        .game-container
-            .chat-box 
-                form#chatForm
-                    input(type="text" placeholder="Write your message!")
-                ul.chat 
-        .notifications
+        header 
+            nav 
+                ul 
+                    li.logo MatchMind
+                    li 
+                        button 화면저장
+                    li 
+                        button.logout 나가기
+        div
+        main
+            div.login-box
+                form#loginForm
+                    input(type="text" placeholder="What is your name?")
+            div.game-container
+                div.players
+                    ul.player-list
+                        li 
+                            div.player
+                                div.player__info
+                                    div.player__nickname
+                                        div Nick Name
+                                        div.nickname
+                                    div.player__grade
+                                    div.player__score
+                                        span 정답
+                                        span.score 0
+                                div.player__avatar
+                        li 
+                            div.player
+                                div.player__info
+                                    div.player__nickname
+                                        div Nick Name
+                                        div.nickname
+                                    div.player__grade
+                                    div.player__score
+                                        span 정답
+                                        span.score
+                                div.player__avatar
+                        li 
+                            div.player
+                                div.player__info
+                                    div.player__nickname
+                                        div Nick Name
+                                        div.nickname
+                                    div.player__grade
+                                    div.player__score
+                                        span 정답
+                                        span.score
+                                div.player__avatar
+                        li 
+                            div.player
+                                div.player__info
+                                    div.player__nickname
+                                        div Nick Name
+                                        div.nickname
+                                    div.player__grade
+                                    div.player__score
+                                        span 정답
+                                        span.score
+                                div.player__avatar
+                div.paint 
+                    span PAINT BOARD
+                    div
+                        canvas(width="700" height="420") 
+                    div.paint__controls 
+                        div
+                            div
+                                span COLOR
+                                div.color.color--chosen
+                            div.color-picker 
+                            div.color.color--black 
+                            div.color.color--white
+                        div.paint__buttons 
+                            button#fillBtn 채우기
+                            button#eraserBtn 전체지우기
+                            button#giveupBtn 포기
+                    div.paint__feature 
+                        div 
+                            div.timer 
+                                div.timer__time 00:00
+                                div 
+                                    span POINTS
+                                    div.timer__points 0
+                        div 
+                            form#chatForm.chat
+                                label(for="chat") CHATTING &sdot; &sdot;
+                                input(type="text" id="chat")
+                div.players
+                    ul.player-list
+                        li 
+                            div.player
+                                div.player__avatar
+                                div.player__info
+                                    div.player__nickname
+                                        div Nick Name
+                                        div.nickname
+                                    div.player__grade
+                                    div.player__score
+                                        span 정답
+                                        span.score
+                        li 
+                            div.player
+                                div.player__avatar
+                                div.player__info
+                                    div.player__nickname
+                                        div Nick Name
+                                        div.nickname
+                                    div.player__grade
+                                    div.player__score
+                                        span 정답
+                                        span.score
+                        li 
+                            div.player
+                                div.player__avatar
+                                div.player__info
+                                    div.player__nickname
+                                        div Nick Name
+                                        div.nickname
+                                    div.player__grade
+                                    div.player__score
+                                        span 정답
+                                        span.score
+                        li 
+                            div.player
+                                div.player__avatar
+                                div.player__info
+                                    div.player__nickname
+                                        div Nick Name
+                                        div.nickname
+                                    div.player__grade
+                                    div.player__score
+                                        span 정답
+                                        span.score
+            div.notifications
+        footer
         script.
             window.events = !{events}
         script(src="/socket.io/socket.io.js") 
+        script(src="https://cdn.jsdelivr.net/npm/@jaames/iro@5") 
         script(src="/js/main.js") 

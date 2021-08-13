@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/mingulmangul/match-mind#readme",
   "dependencies": {
+    "@jaames/iro": "^5.5.2",
     "express": "^4.17.1",
     "pug": "^3.0.2",
     "socket.io": "^4.1.3"
