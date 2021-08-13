@@ -1,12 +1,15 @@
 import iro from "@jaames/iro";
 
-const canvas = document.querySelector("canvas");
 const chosen = document.querySelector(".color--chosen");
+const canvas = document.querySelector("canvas");
+const ctx = canvas.getContext("2d");
 
+ctx.strokeStyle = "#031b29";
 let painting = false;
 
 const onColorChange = (color) => {
   chosen.style.backgroundColor = color.rgbString;
+  ctx.strokeStyle = color.rgbString;
 };
 
 const startPainting = () => (painting = true);
@@ -15,10 +18,16 @@ const stopPainting = () => (painting = false);
 const onMouseMove = (event) => {
   const x = event.offsetX;
   const y = event.offsetY;
+  if (!painting) {
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+  } else {
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  }
 };
 
 if (canvas) {
-  console.log("canvas");
   const colorPicker = new iro.ColorPicker(".color-picker", {
     width: 200,
     color: "rgb(255, 0, 0)",
