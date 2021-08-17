@@ -6,10 +6,12 @@ const blackBtn = document.querySelector(".color--black");
 const whiteBtn = document.querySelector(".color--white");
 const fillBtn = document.querySelector("#fillBtn");
 const saveBtn = document.querySelector(".save-btn");
+const eraserBtn = document.querySelector("#eraserBtn");
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 
 const BLACK = "#031b29";
+const WHITE = "#f2f2eb";
 
 ctx.strokeStyle = BLACK;
 ctx.fillStyle = BLACK;
@@ -67,7 +69,20 @@ const onSaveBtnClick = () => {
   });
 };
 
+const onEraserBtnClick = () => {
+  ctx.fillStyle = WHITE;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = chosen.style.backgroundColor;
+};
+
 if (canvas) {
+  canvas.addEventListener("mousemove", onMouseMove);
+  canvas.addEventListener("mousedown", startPainting);
+  canvas.addEventListener("mouseup", stopPainting);
+  canvas.addEventListener("mouseleave", stopPainting);
+  canvas.addEventListener("click", onCanvasClick);
+  canvas.addEventListener("contextmenu", onCanvasCM);
+
   const colorPicker = new iro.ColorPicker(".color-picker", {
     width: 200,
     color: "rgb(255, 0, 0)",
@@ -85,10 +100,5 @@ if (canvas) {
   whiteBtn.addEventListener("click", onColorChange);
   fillBtn.addEventListener("click", onFillBtnClick);
   saveBtn.addEventListener("click", onSaveBtnClick);
-  canvas.addEventListener("mousemove", onMouseMove);
-  canvas.addEventListener("mousedown", startPainting);
-  canvas.addEventListener("mouseup", stopPainting);
-  canvas.addEventListener("mouseleave", stopPainting);
-  canvas.addEventListener("click", onCanvasClick);
-  canvas.addEventListener("contextmenu", onCanvasCM);
+  eraserBtn.addEventListener("click", onEraserBtnClick);
 }
