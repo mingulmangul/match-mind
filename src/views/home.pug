@@ -12,7 +12,7 @@ html(lang="en")
                 ul 
                     li.logo MatchMind
                     li 
-                        button 화면저장
+                        button.save-btn 화면저장
                     li 
                         button.logout 나가기
         div
@@ -77,8 +77,8 @@ html(lang="en")
                                 span COLOR
                                 div.color.color--chosen
                             div.color-picker 
-                            div.color.color--black 
-                            div.color.color--white
+                            div.color.color--black(style="background-color: #031b29;") 
+                            div.color.color--white(style="background-color: #f2f2eb;")
                         div.paint__buttons 
                             button#fillBtn 채우기
                             button#eraserBtn 전체지우기
