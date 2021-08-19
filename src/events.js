@@ -5,6 +5,7 @@ const events = {
   fullUser: "fullUser",
   leaveUser: "leaveUser",
   loginUser: "loginUser",
+  logoutUser: "logoutUser",
   // newUser: "newUser",
   // playerUpdate: "playerUpdate",
   sendMsg: "sendMessage",

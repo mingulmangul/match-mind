@@ -8,6 +8,11 @@ const players = new Array(8);
 
 io.on("connection", (socket) => {
   const broadcast = (event, data) => socket.broadcast.emit(event, data);
+  const deleteUser = () => {
+    const playerNum = socket.playerNum;
+    players[playerNum] = undefined;
+    io.emit(events.leaveUser, { playerNum });
+  };
 
   socket.on(events.loginUser, ({ nickname }) => {
     const playerNum = players.findIndex((player) => player === undefined);
@@ -27,11 +32,9 @@ io.on("connection", (socket) => {
     io.emit(events.enterUser, { players });
   });
 
-  socket.on(events.disconnect, () => {
-    const playerNum = socket.playerNum;
-    players[playerNum] = undefined;
-    io.emit(events.leaveUser, { playerNum });
-  });
+  socket.on(events.logoutUser, () => deleteUser());
+
+  socket.on(events.disconnect, () => deleteUser());
 
   socket.on(events.submitMsg, ({ text }) => {
     broadcast(events.sendMsg, { text, nickname: socket.nickname });

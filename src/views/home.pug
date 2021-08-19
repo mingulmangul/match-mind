@@ -6,7 +6,7 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         link(rel="stylesheet", href="/css/styles.css")
         title Match Mind
-    body 
+    body.logged-out
         header 
             nav 
                 ul 
@@ -29,11 +29,12 @@ html(lang="en")
                                     div.player__nickname
                                         div Nick Name
                                         div.nickname
-                                    div.player__grade
+                                    div.player__grade A
                                     div.player__score
                                         span 정답
                                         span.score 0
                                 div.player__avatar
+                                div.player__chat.hidden 
                         li 
                             div.player
                                 div.player__info
@@ -45,6 +46,7 @@ html(lang="en")
                                         span 정답
                                         span.score
                                 div.player__avatar
+                                div.player__chat.hidden 
                         li 
                             div.player
                                 div.player__info
@@ -56,6 +58,7 @@ html(lang="en")
                                         span 정답
                                         span.score
                                 div.player__avatar
+                                div.player__chat.hidden 
                         li 
                             div.player
                                 div.player__info
@@ -67,6 +70,7 @@ html(lang="en")
                                         span 정답
                                         span.score
                                 div.player__avatar
+                                div.player__chat.hidden 
                 div.paint 
                     span PAINT BOARD
                     div
@@ -107,6 +111,7 @@ html(lang="en")
                                     div.player__score
                                         span 정답
                                         span.score
+                                div.player__chat.player__chat--left.hidden 
                         li 
                             div.player
                                 div.player__avatar
@@ -118,6 +123,7 @@ html(lang="en")
                                     div.player__score
                                         span 정답
                                         span.score
+                                div.player__chat.player__chat--left.hidden 
                         li 
                             div.player
                                 div.player__avatar
@@ -129,6 +135,7 @@ html(lang="en")
                                     div.player__score
                                         span 정답
                                         span.score
+                                div.player__chat.player__chat--left.hidden 
                         li 
                             div.player
                                 div.player__avatar
@@ -140,6 +147,7 @@ html(lang="en")
                                     div.player__score
                                         span 정답
                                         span.score
+                                div.player__chat.player__chat--left.hidden 
             div.notifications
         footer
         script.
