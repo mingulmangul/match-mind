@@ -1,16 +1,17 @@
 import { handleSendMsg } from "./chat";
-import { handleDisconnectedUser, handleNewUser } from "./notifications";
+import { handleFullUser } from "./notifications";
+import { handleEnterUser, handleLeaveUser } from "./players";
 
 let socket = null;
 
 export const getSocket = () => socket;
 
-const setSocket = (newSocket) => (socket = newSocket);
-
 export const initSocket = (newSocket) => {
   const { events } = window;
-  setSocket(newSocket);
-  socket.on(events.newUser, handleNewUser);
-  socket.on(events.disconnectedUser, handleDisconnectedUser);
+  socket = newSocket;
+  socket.on(events.enterUser, handleEnterUser);
+  socket.on(events.leaveUser, handleLeaveUser);
+  socket.on(events.fullUser, handleFullUser);
+  // socket.on(events.playerUpdate, handlePlayerUpdate);
   socket.on(events.sendMsg, handleSendMsg);
 };

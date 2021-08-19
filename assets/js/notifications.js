@@ -15,3 +15,5 @@ export const handleNewUser = ({ nickname }) =>
 
 export const handleDisconnectedUser = ({ nickname }) =>
   showNotification(`${nickname} just left!!`, USER_OUT);
+
+export const handleFullUser = () => showNotification("Full USER!!!", USER_OUT);

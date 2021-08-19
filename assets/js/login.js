@@ -1,8 +1,7 @@
-import { initSocket } from "./sockets";
+import { getSocket, initSocket } from "./sockets";
 
 const logoutBtn = document.querySelector(".logout");
 const loginForm = document.getElementById("loginForm");
-const nicknamediv = document.querySelector(".nickname");
 
 const NICKNAME = "nickname";
 const LOGGED_IN = "logged-in";
@@ -10,23 +9,23 @@ const LOGGED_OUT = "logged-out";
 
 const login = (nickname) => {
   document.body.className = LOGGED_IN;
-  nicknamediv.innerText = nickname;
   const socket = io();
-  socket.emit(window.events.setNickname, { nickname });
+  socket.emit(window.events.loginUser, { nickname });
   initSocket(socket);
 };
 
 const logout = () => {
+  getSocket().emit(window.events.disconnect);
   localStorage.clear();
   location.reload();
 };
 
-const onFormSubmit = (event) => {
+const onLoginFormSubmit = (event) => {
   event.preventDefault();
   const input = loginForm.querySelector("input");
   const { value } = input;
   input.value = "";
-  localStorage.setItem(NICKNAME, value);
+  // localStorage.setItem(NICKNAME, value);
   login(value);
 };
 
@@ -38,8 +37,10 @@ if (nickname) {
   document.body.className = LOGGED_OUT;
 }
 
-logoutBtn.addEventListener("click", logout);
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", logout);
+}
 
 if (loginForm) {
-  loginForm.addEventListener("submit", onFormSubmit);
+  loginForm.addEventListener("submit", onLoginFormSubmit);
 }

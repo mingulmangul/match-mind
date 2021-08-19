@@ -1,25 +1,41 @@
-import { join } from "path";
-import express from "express";
 import socketIO from "socket.io";
-import logger from "morgan";
-import socketController from "./socketController";
+import server from "./app";
 import events from "./events";
-
-const PORT = 4000;
-
-const app = express();
-
-app.set("views", process.cwd() + "/src/views");
-app.set("view engine", "pug");
-app.use(logger("dev"));
-app.use(express.static(join(__dirname, "static")));
-
-app.get("/", (req, res) =>
-  res.render("home", { events: JSON.stringify(events) })
-);
-
-const server = app.listen(PORT, console.log("💚server is running💚"));
 
 const io = socketIO(server);
 
-io.on("connection", socketController);
+const players = new Array(8);
+
+io.on("connection", (socket) => {
+  const broadcast = (event, data) => socket.broadcast.emit(event, data);
+
+  socket.on(events.loginUser, ({ nickname }) => {
+    const playerNum = players.findIndex((player) => player === undefined);
+    if (playerNum < 0) {
+      socket.emit(events.fullUser);
+      return;
+    }
+    socket.playerNum = playerNum;
+    socket.nickname = nickname;
+    const player = {
+      playerNum,
+      nickname,
+      score: 0,
+      avatar: null,
+    };
+    players[playerNum] = player;
+    io.emit(events.enterUser, { players });
+  });
+
+  socket.on(events.disconnect, () => {
+    const playerNum = socket.playerNum;
+    players[playerNum] = undefined;
+    io.emit(events.leaveUser, { playerNum });
+  });
+
+  socket.on(events.submitMsg, ({ text }) => {
+    broadcast(events.sendMsg, { text, nickname: socket.nickname });
+  });
+});
+
+setInterval(() => console.log(players), 4000);
