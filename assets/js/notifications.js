@@ -1,22 +1,22 @@
 import { getSocket } from "./sockets";
 
 const notification = document.querySelector(".notification");
+const notice = notification.querySelector("p");
 
 const HIDDEN = "hidden";
 
-let timer = null;
+let countTimer = null;
 let count = null;
 
 const showNotification = (text) => {
   notification.classList.remove(HIDDEN);
-  const notice = notification.querySelector("p");
   notice.innerText = text;
 };
 
-const countStartTimer = () => {
+const startCountTimer = () => {
   if (count < 1) {
     notification.classList.add(HIDDEN);
-    clearInterval(timer);
+    clearInterval(countTimer);
     getSocket().emit(window.events.startGame);
     return;
   }
@@ -26,12 +26,12 @@ const countStartTimer = () => {
 export const handleFullUser = () => showNotification("방이 가득 찼습니다.");
 
 export const handleReadyGame = ({ gamePlaying }) => {
-  count = 3;
-  if (timer) {
-    clearInterval(timer);
+  count = 15;
+  if (countTimer) {
+    clearInterval(countTimer);
   }
   if (gamePlaying) {
-    timer = setInterval(countStartTimer, 1000);
+    countTimer = setInterval(startCountTimer, 1000);
   } else {
     showNotification("2명 이상의 플레이어가 모이면 게임을 시작합니다.");
   }

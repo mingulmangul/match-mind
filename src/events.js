@@ -19,6 +19,7 @@ const events = {
   // game
   readyGame: "readyGame",
   startGame: "startGame",
+  paintWord: "paintWord",
 };
 
 export default events;

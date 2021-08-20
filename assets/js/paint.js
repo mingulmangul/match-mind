@@ -48,7 +48,7 @@ const showStroke = (x, y, color) => {
   ctx.strokeStyle = getCurrentColor();
 };
 
-const fill = (color) => {
+export const fill = (color) => {
   if (color) {
     ctx.fillStyle = color;
   }
@@ -60,10 +60,8 @@ const handleMouseMove = (event) => {
   const x = event.offsetX;
   const y = event.offsetY;
   if (!painting) {
-    showPath(x, y);
     getSocket().emit(window.events.sendPath, { x, y });
   } else {
-    showStroke(x, y);
     getSocket().emit(window.events.sendStroke, {
       x,
       y,
@@ -74,7 +72,6 @@ const handleMouseMove = (event) => {
 
 const handleMouseDown = () => {
   if (filling) {
-    fill();
     getSocket().emit(window.events.fillCanvas, {
       color: getCurrentColor(),
     });
@@ -105,7 +102,6 @@ const handleSaveBtnClick = () => {
 };
 
 const handleEraserBtnClick = () => {
-  fill(WHITE);
   getSocket().emit(window.events.fillCanvas, {
     color: WHITE,
   });

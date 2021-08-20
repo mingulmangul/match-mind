@@ -4,7 +4,7 @@ const chatForm = document.querySelector(".chat-form");
 
 const HIDDEN = "hidden";
 
-let timer = null;
+let msgTimer = null;
 
 export const handleSendMsg = ({ text, playerNum }) =>
   showNewMsg(text, playerNum);
@@ -15,11 +15,11 @@ const showNewMsg = (text, playerNum) => {
   );
   const chatDiv = speaker.querySelector(".player__chat");
   chatDiv.innerText = text;
-  if (timer) {
-    clearTimeout(timer);
+  if (msgTimer) {
+    clearTimeout(msgTimer);
   }
   chatDiv.classList.remove(HIDDEN);
-  timer = setTimeout(() => chatDiv.classList.add(HIDDEN), 4000);
+  msgTimer = setTimeout(() => chatDiv.classList.add(HIDDEN), 4000);
 };
 
 const handleChatSubmit = (event) => {
