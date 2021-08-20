@@ -1,9 +1,6 @@
 const showPlayers = (players) => {
   const playerRooms = document.querySelectorAll(".player");
   players.forEach((player) => {
-    if (!player) {
-      return;
-    }
     const { playerNum, nickname, score } = player;
     const playerRoom = playerRooms[playerNum];
     playerRoom.setAttribute("data-playerNum", playerNum);

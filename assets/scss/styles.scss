@@ -5,8 +5,9 @@
 
 // Components
 @import "components/header.scss";
-@import "components/paint.scss";
 @import "components/login.scss";
+@import "components/notification.scss";
+@import "components/paint.scss";
 @import "components/player.scss";
 
 /*
@@ -61,4 +62,8 @@ body {
       justify-items: center;
     }
   }
+}
+
+.hidden {
+  display: none;
 }

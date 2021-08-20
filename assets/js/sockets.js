@@ -1,5 +1,5 @@
 import { handleSendMsg } from "./chat";
-import { handleFullUser } from "./notifications";
+import { handleFullUser, handleReadyGame } from "./notifications";
 import {
   handleFilledCanvas,
   handleReceivePath,
@@ -27,4 +27,7 @@ export const initSocket = (newSocket) => {
 
   // chat
   socket.on(events.sendMsg, handleSendMsg);
+
+  // game
+  socket.on(events.readyGame, handleReadyGame);
 };

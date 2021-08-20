@@ -16,6 +16,9 @@ const events = {
   // chat
   sendMsg: "sendMessage",
   submitMsg: "submitMessage",
+  // game
+  readyGame: "readyGame",
+  startGame: "startGame",
 };
 
 export default events;

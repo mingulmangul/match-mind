@@ -16,10 +16,10 @@ const showNewMsg = (text, playerNum) => {
   const chatDiv = speaker.querySelector(".player__chat");
   chatDiv.innerText = text;
   if (timer) {
-    clearInterval(timer);
+    clearTimeout(timer);
   }
   chatDiv.classList.remove(HIDDEN);
-  timer = setInterval(() => chatDiv.classList.add(HIDDEN), 5000);
+  timer = setTimeout(() => chatDiv.classList.add(HIDDEN), 4000);
 };
 
 const handleChatSubmit = (event) => {
