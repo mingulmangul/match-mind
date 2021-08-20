@@ -1,19 +1,25 @@
 import { getSocket } from "./sockets";
 
-const chat = document.querySelector(".chat");
-const chatForm = document.querySelector("#chatForm");
+const chatForm = document.querySelector(".chat-form");
 
-export const handleSendMsg = ({ text, nickname }) => {
-  showNewMsg(text, nickname);
-};
+const HIDDEN = "hidden";
 
-const showNewMsg = (text, nickname) => {
-  const speaker = nickname || "You";
-  const msg = document.createElement("li");
-  msg.innerHTML = `<span class="speaker ${
-    nickname ? "speaker--other" : "speaker--self"
-  }">${speaker}</span>${text}`;
-  chat.appendChild(msg);
+let timer = null;
+
+export const handleSendMsg = ({ text, playerNum }) =>
+  showNewMsg(text, playerNum);
+
+const showNewMsg = (text, playerNum) => {
+  const speaker = document.querySelector(
+    `.player[data-playerNum=\"${playerNum}\"]`
+  );
+  const chatDiv = speaker.querySelector(".player__chat");
+  chatDiv.innerText = text;
+  if (timer) {
+    clearInterval(timer);
+  }
+  chatDiv.classList.remove(HIDDEN);
+  timer = setInterval(() => chatDiv.classList.add(HIDDEN), 5000);
 };
 
 const handleChatSubmit = (event) => {
@@ -21,7 +27,6 @@ const handleChatSubmit = (event) => {
   const input = chatForm.querySelector("input");
   const { value } = input;
   input.value = "";
-  showNewMsg(value);
   getSocket().emit(window.events.submitMsg, { text: value });
 };
 

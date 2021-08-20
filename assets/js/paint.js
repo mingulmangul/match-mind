@@ -1,7 +1,8 @@
 import iro from "@jaames/iro";
 import html2canvas from "html2canvas";
+import { getSocket } from "./sockets";
 
-const chosen = document.querySelector(".color--chosen");
+const currentColor = document.querySelector(".color--current");
 const blackBtn = document.querySelector(".color--black");
 const whiteBtn = document.querySelector(".color--white");
 const fillBtn = document.querySelector("#fillBtn");
@@ -20,29 +21,69 @@ ctx.lineWidth = 4;
 let painting = false;
 let filling = false;
 
-const onColorChange = (event) => {
+const startPainting = () => (painting = true);
+const stopPainting = () => (painting = false);
+
+const getCurrentColor = () => currentColor.style.backgroundColor;
+const setCurrentColor = (color) => (currentColor.style.backgroundColor = color);
+
+const handleColorChange = (event) => {
   const color = event.rgbString || event.target.style.backgroundColor;
-  chosen.style.backgroundColor = color;
+  setCurrentColor(color);
   ctx.strokeStyle = color;
   ctx.fillStyle = color;
 };
 
-const startPainting = () => (painting = true);
-const stopPainting = () => (painting = false);
+const showPath = (x, y) => {
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+};
 
-const onMouseMove = (event) => {
+const showStroke = (x, y, color) => {
+  if (color) {
+    ctx.strokeStyle = color;
+  }
+  ctx.lineTo(x, y);
+  ctx.stroke();
+  ctx.strokeStyle = getCurrentColor();
+};
+
+const fill = (color) => {
+  if (color) {
+    ctx.fillStyle = color;
+  }
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = getCurrentColor();
+};
+
+const handleMouseMove = (event) => {
   const x = event.offsetX;
   const y = event.offsetY;
   if (!painting) {
-    ctx.beginPath();
-    ctx.moveTo(x, y);
+    showPath(x, y);
+    getSocket().emit(window.events.sendPath, { x, y });
   } else {
-    ctx.lineTo(x, y);
-    ctx.stroke();
+    showStroke(x, y);
+    getSocket().emit(window.events.sendStroke, {
+      x,
+      y,
+      color: getCurrentColor(),
+    });
   }
 };
 
-const onFillBtnClick = () => {
+const handleMouseDown = () => {
+  if (filling) {
+    fill();
+    getSocket().emit(window.events.fillCanvas, {
+      color: getCurrentColor(),
+    });
+  } else {
+    startPainting();
+  }
+};
+
+const handleFillBtnClick = () => {
   if (filling) {
     filling = false;
     fillBtn.innerText = "채우기";
@@ -52,15 +93,9 @@ const onFillBtnClick = () => {
   }
 };
 
-const onCanvasClick = () => {
-  if (filling) {
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }
-};
+const handleCanvasCM = (event) => event.preventDefault();
 
-const onCanvasCM = (event) => event.preventDefault();
-
-const onSaveBtnClick = () => {
+const handleSaveBtnClick = () => {
   html2canvas(document.body).then(function (image) {
     const saveLink = document.createElement("a");
     saveLink.href = image.toDataURL();
@@ -69,19 +104,25 @@ const onSaveBtnClick = () => {
   });
 };
 
-const onEraserBtnClick = () => {
-  ctx.fillStyle = WHITE;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = chosen.style.backgroundColor;
+const handleEraserBtnClick = () => {
+  fill(WHITE);
+  getSocket().emit(window.events.fillCanvas, {
+    color: WHITE,
+  });
 };
 
+export const handleReceivePath = ({ x, y }) => showPath(x, y);
+
+export const handleReceiveStroke = ({ x, y, color }) => showStroke(x, y, color);
+
+export const handleFilledCanvas = ({ color }) => fill(color);
+
 if (canvas) {
-  canvas.addEventListener("mousemove", onMouseMove);
-  canvas.addEventListener("mousedown", startPainting);
+  canvas.addEventListener("mousemove", handleMouseMove);
+  canvas.addEventListener("mousedown", handleMouseDown);
   canvas.addEventListener("mouseup", stopPainting);
   canvas.addEventListener("mouseleave", stopPainting);
-  canvas.addEventListener("click", onCanvasClick);
-  canvas.addEventListener("contextmenu", onCanvasCM);
+  canvas.addEventListener("contextmenu", handleCanvasCM);
 
   const colorPicker = new iro.ColorPicker(".color-picker", {
     width: 200,
@@ -95,10 +136,12 @@ if (canvas) {
       },
     ],
   });
-  colorPicker.on("color:change", onColorChange);
-  blackBtn.addEventListener("click", onColorChange);
-  whiteBtn.addEventListener("click", onColorChange);
-  fillBtn.addEventListener("click", onFillBtnClick);
-  saveBtn.addEventListener("click", onSaveBtnClick);
-  eraserBtn.addEventListener("click", onEraserBtnClick);
+  colorPicker.on("color:change", handleColorChange);
+
+  setCurrentColor(BLACK);
+  blackBtn.addEventListener("click", handleColorChange);
+  whiteBtn.addEventListener("click", handleColorChange);
+  fillBtn.addEventListener("click", handleFillBtnClick);
+  saveBtn.addEventListener("click", handleSaveBtnClick);
+  eraserBtn.addEventListener("click", handleEraserBtnClick);
 }

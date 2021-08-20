@@ -79,7 +79,7 @@ html(lang="en")
                         div
                             div
                                 span COLOR
-                                div.color.color--chosen
+                                div.color.color--current
                             div.color-picker 
                             div.color.color--black(style="background-color: #031b29;") 
                             div.color.color--white(style="background-color: #f2f2eb;")
@@ -95,9 +95,9 @@ html(lang="en")
                                     span POINTS
                                     div.timer__points 0
                         div 
-                            form#chatForm.chat
+                            form.chat-form
                                 label(for="chat") CHATTING &sdot; &sdot;
-                                input(type="text" id="chat")
+                                input(type="text" id="chat" maxLength="50")
                 div.players
                     ul.player-list
                         li 

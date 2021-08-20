@@ -1,13 +1,19 @@
 const events = {
+  // player
   disconnect: "disconnect",
-  // disconnectedUser: "disconnectedUser",
   enterUser: "enterUser",
   fullUser: "fullUser",
   leaveUser: "leaveUser",
   loginUser: "loginUser",
   logoutUser: "logoutUser",
-  // newUser: "newUser",
-  // playerUpdate: "playerUpdate",
+  // paint
+  fillCanvas: "fillCanvas",
+  filledCanvas: "filledCanvas",
+  receivePath: "receivePath",
+  receiveStroke: "receiveStroke",
+  sendPath: "sendPath",
+  sendStroke: "sendStroke",
+  // chat
   sendMsg: "sendMessage",
   submitMsg: "submitMessage",
 };
