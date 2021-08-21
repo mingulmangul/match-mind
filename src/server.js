@@ -29,6 +29,9 @@ const selectPainter = () => {
 };
 
 const selectWord = () => {
+  if (words.length === 0) {
+    return;
+  }
   const selected = words[Math.floor(Math.random() * words.length)];
   words = words.filter((word) => word != selected);
   return selected;
@@ -51,6 +54,9 @@ io.on("connection", (socket) => {
       gamePlaying = false;
       io.emit(events.readyGame, { gamePlaying });
     }
+  };
+  const showResults = () => {
+    console.log("게임끝~");
   };
 
   // player
@@ -108,7 +114,15 @@ io.on("connection", (socket) => {
   socket.on(events.startGame, () => {
     selectPainter();
     words = selectWordList();
-    io.emit(events.paintWord, { word: selectWord() });
+    const word = selectWord();
+    io.emit(events.paintWord, { word });
+  });
+  socket.on(events.startNewRound, () => {
+    selectPainter();
+    const word = selectWord();
+    if (!word) {
+      showResults();
+    }
   });
 });
 

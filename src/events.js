@@ -17,9 +17,10 @@ const events = {
   sendMsg: "sendMessage",
   submitMsg: "submitMessage",
   // game
+  paintWord: "paintWord",
   readyGame: "readyGame",
   startGame: "startGame",
-  paintWord: "paintWord",
+  startNewRound: "startNewRound",
 };
 
 export default events;

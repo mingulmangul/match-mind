@@ -26,7 +26,7 @@ const startCountTimer = () => {
 export const handleFullUser = () => showNotification("방이 가득 찼습니다.");
 
 export const handleReadyGame = ({ gamePlaying }) => {
-  count = 15;
+  count = 5;
   if (countTimer) {
     clearInterval(countTimer);
   }
