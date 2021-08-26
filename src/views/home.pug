@@ -60,14 +60,28 @@ html(lang="en")
                             div
                                 span#word
                         canvas(width="800" height="480") 
-                        div.round-results.hidden
+                        div.results.round-results.hidden
                             p 그림설명 해주신 #[span#painterName] 님 #[span#painterPoint.round-results__score] 점
                             p 정답을 맞히신 #[span#playerName] 님 #[span#playerPoint.round-results__score] 점
                             p 획득하셨습니다.💕
                         div.round-ready.hidden
                             p Round #[span#round]
-                            div.round-results
+                            div.results.round-results
                                 p #[span#nextPainter] 님 차례입니다. 그릴 준비되셨죠?
+                        div.results.rank.hidden
+                            p - 게임 결과 -
+                            ul 
+                                li 
+                                    span 등수
+                                    span 닉네임
+                                    span 정답
+                                    span 점수
+                                - for (var i=1; i<9; i++)
+                                    li 
+                                        span #{i}st 
+                                        span#rankerName 
+                                        span#rankerAnswer 
+                                        span#rankerScore 
                     div.paint__controls 
                         div
                             div

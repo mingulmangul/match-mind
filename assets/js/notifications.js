@@ -33,10 +33,10 @@ export const handleReadyGame = ({ gamePlaying }) => {
   }
   enableCanvas();
   enableChat();
-  resetPaint();
   if (gamePlaying) {
     countTimer = setInterval(startCountTimer, 1000);
   } else {
     showNotification("2명 이상의 플레이어가 모이면 게임을 시작합니다.");
+    resetPaint();
   }
 };

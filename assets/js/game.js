@@ -15,6 +15,10 @@ const playerName = document.querySelector("#playerName");
 const roundReadyDiv = document.querySelector(".round-ready");
 const roundNum = document.querySelector("#round");
 const nextPainterName = document.querySelector("#nextPainter");
+const rankDiv = document.querySelector(".rank");
+const rankersName = document.querySelectorAll("#rankerName");
+const rankersAnswer = document.querySelectorAll("#rankerAnswer");
+const rankersScore = document.querySelectorAll("#rankerScore");
 
 const WHITE = "#f2f2eb";
 const HIDDEN_CLASS = "hidden";
@@ -94,4 +98,15 @@ export const handleShowPainter = ({ round, painter }) => {
     () => roundReadyDiv.classList.add(HIDDEN_CLASS),
     window.events.time
   );
+};
+
+export const handleShowRank = ({ player }) => {
+  player.sort((player1, player2) => player2.score - player1.score);
+  for (let i = 0; i < player.length; i++) {
+    rankersName[i].innerText = player[i].nickname;
+    rankersAnswer[i].innerText = player[i].answer;
+    rankersScore[i].innerText = player[i].score;
+  }
+  rankDiv.classList.remove(HIDDEN_CLASS);
+  setTimeout(() => rankDiv.classList.add(HIDDEN_CLASS), 6000);
 };

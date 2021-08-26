@@ -4,6 +4,7 @@ import {
   handleReceiveTime,
   handleShowAnswer,
   handleShowPainter,
+  handleShowRank,
   handleStartPaint,
   handleStartRound,
 } from "./game";
@@ -42,6 +43,7 @@ export const initSocket = (newSocket) => {
   socket.on(events.receiveTime, handleReceiveTime);
   socket.on(events.showAnswer, handleShowAnswer);
   socket.on(events.showPainter, handleShowPainter);
+  socket.on(events.showRank, handleShowRank);
   socket.on(events.startRound, handleStartRound);
   socket.on(events.startPaint, handleStartPaint);
 };

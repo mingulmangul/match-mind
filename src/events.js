@@ -25,6 +25,7 @@ const events = {
   sendTime: "sendTime",
   showAnswer: "showAnswer",
   showPainter: "showPainter",
+  showRank: "showRank",
   startRound: "startRound",
   startPaint: "startPaint",
 };

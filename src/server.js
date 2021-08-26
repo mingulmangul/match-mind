@@ -14,6 +14,8 @@ let beforePainterNum = -1;
 let words = null;
 let word = null;
 let roundTime = 0;
+let paintPoint = 10;
+let playPoint = 10;
 
 let timer = null;
 
@@ -55,15 +57,15 @@ io.on("connection", (socket) => {
       timer = setTimeout(() => {
         gamePlaying = true;
         setRound();
-      }, 5000);
+      }, 6000);
     } else {
       gamePlaying = false;
+      showResults();
       io.emit(events.readyGame, { gamePlaying });
     }
   };
   const setRound = () => {
     if (words.length === 0) {
-      // 게임 종료
       showResults();
       return;
     }
@@ -74,13 +76,15 @@ io.on("connection", (socket) => {
       round: 10 - words.length,
       painter: nickname,
     });
-    setTimeout(
+    timer = setTimeout(
       () => io.to(id).emit(events.startPaint, { word, playerNum }),
       events.time
     );
   };
   const showResults = () => {
-    console.log("게임끝~");
+    io.emit(events.showRank, { players });
+    gamePlaying = false;
+    setTimeout(checkNumOfPlayers, 6000);
   };
 
   // player
@@ -99,6 +103,7 @@ io.on("connection", (socket) => {
       playerNum,
       nickname,
       avatar: null,
+      answer: 0,
       score: 0,
     };
     socket.playerInfo = player;
@@ -130,14 +135,18 @@ io.on("connection", (socket) => {
     if (text == word) {
       const painter = players[beforePainterNum];
       const player = socket.playerInfo;
-      painter.score++;
-      player.score++;
+      painter.answer++;
+      painter.score += paintPoint;
+      player.answer++;
+      player.score += playPoint;
       io.emit(events.endRound, {
         word,
         painter: painter.nickname,
+        paintPoint,
         player: player.nickname,
+        playPoint,
       });
-      setTimeout(setRound, events.time);
+      timer = setTimeout(setRound, events.time);
     }
   });
 
@@ -145,7 +154,7 @@ io.on("connection", (socket) => {
   socket.on(events.sendTime, ({ time }) => {
     if (time < 0) {
       io.emit(events.endRound, { word });
-      setTimeout(setRound, events.time);
+      timer = setTimeout(setRound, events.time);
     } else {
       roundTime = time;
       broadcast(events.receiveTime, { time });
