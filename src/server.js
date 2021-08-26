@@ -40,13 +40,11 @@ io.on("connection", (socket) => {
     checkNumOfPlayers();
   };
   const checkNumOfPlayers = () => {
-    if (gamePlaying) {
-      socket.emit(events.startGame);
-    } else if (players.length >= 2) {
+    if (players.length >= 2) {
       gamePlaying = true;
       words = selectWordList();
       io.emit(events.readyGame, { gamePlaying });
-      setTimeout(setRound, 5000);
+      setTimeout(setRound, 6000);
     } else {
       gamePlaying = false;
       io.emit(events.readyGame, { gamePlaying });
@@ -89,9 +87,10 @@ io.on("connection", (socket) => {
     players.push(player);
     io.emit(events.enterUser, { players });
     if (gamePlaying) {
-      socket.emit(events.setNonPainter);
+      socket.emit(events.startGame);
+    } else {
+      checkNumOfPlayers();
     }
-    checkNumOfPlayers();
   });
   socket.on(events.logoutUser, () => deleteUser());
 

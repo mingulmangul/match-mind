@@ -5,7 +5,8 @@ import { getSocket } from "./sockets";
 const chatDivs = document.querySelectorAll(".player__chat");
 const wordDiv = document.querySelector(".paint__word");
 const wordSpan = wordDiv.querySelector("#word");
-const timerTime = document.querySelector(".timer__time");
+const timer = document.querySelector(".timer__time");
+const timerTime = timer.querySelectorAll("span");
 
 const WHITE = "#f2f2eb";
 const HIDDEN_CLASS = "hidden";
@@ -22,11 +23,9 @@ const startRoundTimer = () => {
   const minutes = Math.floor(roundTime / 6000);
   const seconds = Math.floor((roundTime % 6000) / 100);
   const digit = roundTime % 100;
-  console.log(roundTime, minutes, seconds, digit);
-  timerTime.innerText = `${minutes}:${String(seconds).padStart(
-    2,
-    "0"
-  )}:${String(digit).padStart(2, "0")}`;
+  timerTime[0].innerText = minutes;
+  timerTime[2].innerText = String(seconds).padStart(2, "0");
+  timerTime[3].innerText = String(digit).padStart(2, "0");
   roundTime--;
 };
 

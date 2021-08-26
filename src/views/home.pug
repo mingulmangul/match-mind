@@ -58,8 +58,10 @@ html(lang="en")
                             span 문제
                             span#word
                         canvas(width="800" height="480") 
-                        div.results
-                            p
+                        div.results.hidden
+                            p 그림설명 해주신 #[span#painterName] 님 #[span#painterPoint] 점
+                            p 정답을 맞히신 #[span#playerName] 님 #[span#playerPoint] 점
+                            p 획득하셨습니다.💕
                     div.paint__controls 
                         div
                             div
@@ -75,7 +77,11 @@ html(lang="en")
                     div.paint__feature 
                         div 
                             div.timer 
-                                div.timer__time 00:00
+                                div.timer__time
+                                    span 0
+                                    span :
+                                    span 00
+                                    span 00
                                 div 
                                     span POINTS
                                     div.timer__points 0
