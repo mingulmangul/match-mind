@@ -1,23 +1,28 @@
 .paint {
   position: absolute;
-  top: 30px;
+  top: 22px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 3px 25px;
+  padding: 3px 25px 15px;
   border-radius: 15px;
   background-color: $boardBlue;
   text-align: center;
-  > span {
-    font-size: 36px;
-    font-family: "Squada One", cursive;
-    color: $white;
-    // text-shadow: $darkNavy 3px 3px, $darkNavy -3px 3px, $darkNavy -3px -3px,
-    //   $darkNavy 3px -3px;
-    text-shadow: $darkNavy 3px 0px, $darkNavy -3px 0px, $darkNavy 0px 3px,
-      $darkNavy 0px -3px;
-  }
   > div {
     display: flex;
+  }
+}
+.paint__answer {
+  margin: 3px;
+  width: 100%;
+  min-height: 31px;
+  justify-content: center;
+  span {
+    border-radius: 30px;
+    padding: 7px 10px 5px;
+    background-color: $skyBlue;
+    color: $textBlue;
+    font-size: 19px;
+    font-weight: 700;
   }
 }
 .paint__canvas {
@@ -27,16 +32,45 @@
     background-color: $white;
   }
 }
+.paint__word {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  border-radius: 20px;
+  width: 180px;
+  display: flex;
+  align-items: center;
+  background-color: $borderOrange;
+  div {
+    border-radius: inherit;
+    padding: 5px;
+    &:first-child {
+      color: $white;
+      font-family: "Gaegu", cursive;
+      font-size: 23px;
+    }
+    &:last-child {
+      border-top-left-radius: unset;
+      border-bottom-left-radius: unset;
+      width: 71%;
+      text-align: center;
+      background-color: $white;
+      color: $borderOrange;
+      font-size: 17px;
+    }
+  }
+}
 .results {
   position: absolute;
-  top: 160px;
+  top: 150px;
   left: 50%;
   transform: translateX(-50%);
   border: 2px solid $borderGrey;
   border-radius: 20px;
   text-align: center;
-  font-size: 22px;
+  background-color: $white;
   font-family: "Gaegu", cursive;
+  font-size: 22px;
   p:first-child {
     background-color: $lightYellow;
   }
@@ -50,6 +84,7 @@
     span {
       width: 60px;
       border-bottom: 2px solid $white;
+      color: $textBlue;
     }
     span:last-child {
       width: 20px;
@@ -122,15 +157,12 @@
       width: 140px;
       font-family: "Orbitron", sans-serif;
       display: grid;
-      grid-template-columns: 25% 10% 40% 25%;
+      grid-template-columns: 40% 10% 50%;
       place-items: flex-end center;
       span {
         margin-bottom: 5px;
         min-width: 20px;
         font-size: 27px;
-        &:last-child {
-          font-size: 14px;
-        }
       }
     }
     .timer__points {

@@ -10,9 +10,12 @@ const MAX_PLAYERS = 8;
 let players = new Array();
 const playerRooms = new Array(MAX_PLAYERS);
 let gamePlaying = false;
-let beforePainterNum = null;
+let beforePainterNum = -1;
 let words = null;
 let word = null;
+let roundTime = 0;
+
+let timer = null;
 
 const selectPainter = () => {
   let painterNum = Math.floor(Math.random() * players.length);
@@ -41,10 +44,18 @@ io.on("connection", (socket) => {
   };
   const checkNumOfPlayers = () => {
     if (players.length >= 2) {
-      gamePlaying = true;
+      if (gamePlaying) {
+        return;
+      }
+      if (timer) {
+        clearTimeout(timer);
+      }
       words = selectWordList();
-      io.emit(events.readyGame, { gamePlaying });
-      setTimeout(setRound, 6000);
+      io.emit(events.readyGame, { gamePlaying: true });
+      timer = setTimeout(() => {
+        gamePlaying = true;
+        setRound();
+      }, 5000);
     } else {
       gamePlaying = false;
       io.emit(events.readyGame, { gamePlaying });
@@ -88,6 +99,7 @@ io.on("connection", (socket) => {
     io.emit(events.enterUser, { players });
     if (gamePlaying) {
       socket.emit(events.startGame);
+      socket.emit(events.receiveTime, { roundTime });
     } else {
       checkNumOfPlayers();
     }
@@ -111,8 +123,9 @@ io.on("connection", (socket) => {
   });
 
   // game
-  socket.on(events.startRound, () => {
-    io.emit(events.showAnswer, { word });
+  socket.on(events.sendTime, ({ time }) => {
+    roundTime = time;
+    broadcast(events.receiveTime, { time });
   });
 });
 

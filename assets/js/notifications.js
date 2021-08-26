@@ -1,4 +1,6 @@
-import { getSocket } from "./sockets";
+import { enableChat } from "./chat";
+import { resetPaint } from "./game";
+import { enableCanvas } from "./paint";
 
 const notification = document.querySelector(".notification");
 const notice = notification.querySelector("p");
@@ -29,6 +31,9 @@ export const handleReadyGame = ({ gamePlaying }) => {
   if (countTimer) {
     clearInterval(countTimer);
   }
+  enableCanvas();
+  enableChat();
+  resetPaint();
   if (gamePlaying) {
     countTimer = setInterval(startCountTimer, 1000);
   } else {

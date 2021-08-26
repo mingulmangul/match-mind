@@ -52,11 +52,13 @@ html(lang="en")
                                                 span.score
                                         div.player__chat.hidden 
                 div.paint 
-                    span PAINT BOARD
+                    div.paint__answer
+                        span#answer.hidden 족발
                     div.paint__canvas
                         div.paint__word.hidden
-                            span 문제
-                            span#word
+                            div 문제
+                            div
+                                span#word
                         canvas(width="800" height="480") 
                         div.results.hidden
                             p 그림설명 해주신 #[span#painterName] 님 #[span#painterPoint] 점
@@ -80,7 +82,6 @@ html(lang="en")
                                 div.timer__time
                                     span 0
                                     span :
-                                    span 00
                                     span 00
                                 div 
                                     span POINTS

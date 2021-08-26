@@ -11,32 +11,41 @@ const timerTime = timer.querySelectorAll("span");
 const WHITE = "#f2f2eb";
 const HIDDEN_CLASS = "hidden";
 
-let roundTime = null;
+let roundTime = 0;
 let roundTimer = null;
+
+const setTimer = (time) => {
+  const minutes = Math.floor(time / 60);
+  const seconds = Math.floor(time % 60);
+  timerTime[0].innerText = minutes;
+  timerTime[2].innerText = String(seconds).padStart(2, "0");
+};
 
 const startRoundTimer = () => {
   if (roundTime < 0) {
     clearInterval(roundTimer);
-    getSocket().emit(window.events.startRound);
-    return;
+  } else {
+    getSocket().emit(window.events.sendTime, { time: roundTime });
+    setTimer(roundTime);
+    roundTime--;
   }
-  const minutes = Math.floor(roundTime / 6000);
-  const seconds = Math.floor((roundTime % 6000) / 100);
-  const digit = roundTime % 100;
-  timerTime[0].innerText = minutes;
-  timerTime[2].innerText = String(seconds).padStart(2, "0");
-  timerTime[3].innerText = String(digit).padStart(2, "0");
-  roundTime--;
+};
+
+export const resetPaint = () => {
+  if (roundTimer) {
+    clearInterval(roundTimer);
+    timerTime[0].innerText = "0";
+    timerTime[2].innerText = "00";
+  }
+  wordDiv.classList.add(HIDDEN_CLASS);
+  fill(WHITE);
+  chatDivs.forEach((chatDiv) => chatDiv.classList.add(HIDDEN_CLASS));
 };
 
 export const handleStartRound = () => {
   disableCanvas();
   enableChat();
-  wordDiv.classList.add(HIDDEN_CLASS);
-  fill(WHITE);
-  chatDivs.forEach((chatDiv) => chatDiv.classList.add(HIDDEN_CLASS));
-  roundTime = 9000;
-  roundTimer = setInterval(startRoundTimer, 10);
+  resetPaint();
 };
 
 export const handleStartPaint = ({ word }) => {
@@ -44,6 +53,8 @@ export const handleStartPaint = ({ word }) => {
   disableChat();
   wordDiv.classList.remove(HIDDEN_CLASS);
   wordSpan.innerText = word;
+  roundTime = 90;
+  roundTimer = setInterval(startRoundTimer, 1000);
 };
 
-export const handleShowAnswer = ({ word }) => {};
+export const handleReceiveTime = ({ time }) => setTimer(parseInt(time, 10));

@@ -18,10 +18,11 @@ const events = {
   submitMsg: "submitMessage",
   // game
   readyGame: "readyGame",
+  receiveTime: "receiveTime",
+  sendTime: "sendTime",
   showAnswer: "showAnswer",
   startGame: "startGame",
   startPaint: "startPaint",
-  startRound: "startRound",
 };
 
 export default events;
