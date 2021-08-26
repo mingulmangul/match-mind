@@ -40,7 +40,9 @@ io.on("connection", (socket) => {
     checkNumOfPlayers();
   };
   const checkNumOfPlayers = () => {
-    if (players.length >= 2) {
+    if (gamePlaying) {
+      socket.emit(events.startGame);
+    } else if (players.length >= 2) {
       gamePlaying = true;
       words = selectWordList();
       io.emit(events.readyGame, { gamePlaying });
