@@ -9,9 +9,12 @@ const wordSpan = wordDiv.querySelector("#word");
 const timer = document.querySelector(".timer__time");
 const timerTime = timer.querySelectorAll("span");
 const answerDiv = document.querySelector("#answer");
-const resultsDiv = document.querySelector(".results");
-const painterName = resultsDiv.querySelector("#painterName");
-const playerName = resultsDiv.querySelector("#playerName");
+const roundResultsDiv = document.querySelector(".round-results");
+const painterName = document.querySelector("#painterName");
+const playerName = document.querySelector("#playerName");
+const roundReadyDiv = document.querySelector(".round-ready");
+const roundNum = document.querySelector("#round");
+const nextPainterName = document.querySelector("#nextPainter");
 
 const WHITE = "#f2f2eb";
 const HIDDEN_CLASS = "hidden";
@@ -50,7 +53,7 @@ export const resetPaint = () => {
   chatDivs.forEach((chatDiv) => chatDiv.classList.add(HIDDEN_CLASS));
   wordDiv.classList.add(HIDDEN_CLASS);
   answerDiv.classList.add(HIDDEN_CLASS);
-  resultsDiv.classList.add(HIDDEN_CLASS);
+  roundResultsDiv.classList.add(HIDDEN_CLASS);
 };
 
 export const handleStartRound = () => {
@@ -80,5 +83,15 @@ export const handleEndRound = ({ word, painter, player }) => {
     painterName.innerText = painter;
     playerName.innerText = player;
   }
-  resultsDiv.classList.remove(HIDDEN_CLASS);
+  roundResultsDiv.classList.remove(HIDDEN_CLASS);
+};
+
+export const handleShowPainter = ({ round, painter }) => {
+  roundNum.innerText = round;
+  nextPainterName.innerText = painter;
+  roundReadyDiv.classList.remove(HIDDEN_CLASS);
+  setTimeout(
+    () => roundReadyDiv.classList.add(HIDDEN_CLASS),
+    window.events.time
+  );
 };

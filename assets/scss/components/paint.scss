@@ -60,13 +60,14 @@
     }
   }
 }
-.results {
+.round-results {
   position: absolute;
   top: 150px;
   left: 50%;
   transform: translateX(-50%);
   border: 2px solid $borderGrey;
   border-radius: 20px;
+  width: 520px;
   text-align: center;
   background-color: $white;
   font-family: "Gaegu", cursive;
@@ -80,14 +81,34 @@
   p {
     margin: 8px 15px;
     border-radius: 15px;
-    padding: 10px 5px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
     span {
-      width: 60px;
+      margin-right: 5px;
       border-bottom: 2px solid $white;
+      padding: 0 10px;
+      width: 165px;
       color: $textBlue;
     }
-    span:last-child {
-      width: 20px;
+    .round-results__score {
+      width: 50px;
+    }
+  }
+}
+.round-ready {
+  position: absolute;
+  top: 150px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Changa One", cursive;
+  font-size: 50px;
+  .round-results {
+    top: unset;
+    margin-top: 30px;
+    width: 520px;
+    p {
+      background-color: $lightPink;
     }
   }
 }

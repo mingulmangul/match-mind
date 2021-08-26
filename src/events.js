@@ -1,4 +1,6 @@
 const events = {
+  // event config
+  time: 4000,
   // player
   disconnect: "disconnect",
   enterUser: "enterUser",
@@ -22,7 +24,8 @@ const events = {
   receiveTime: "receiveTime",
   sendTime: "sendTime",
   showAnswer: "showAnswer",
-  startGame: "startGame",
+  showPainter: "showPainter",
+  startRound: "startRound",
   startPaint: "startPaint",
 };
 

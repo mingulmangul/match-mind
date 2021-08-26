@@ -43,12 +43,12 @@ io.on("connection", (socket) => {
     checkNumOfPlayers();
   };
   const checkNumOfPlayers = () => {
+    if (timer) {
+      clearTimeout(timer);
+    }
     if (players.length >= 2) {
       if (gamePlaying) {
         return;
-      }
-      if (timer) {
-        clearTimeout(timer);
       }
       words = selectWordList();
       io.emit(events.readyGame, { gamePlaying: true });
@@ -67,10 +67,17 @@ io.on("connection", (socket) => {
       showResults();
       return;
     }
-    const { id, playerNum } = selectPainter();
+    const { id, playerNum, nickname } = selectPainter();
     word = selectWord();
-    io.emit(events.startGame);
-    io.to(id).emit(events.startPaint, { word, playerNum });
+    io.emit(events.startRound);
+    io.emit(events.showPainter, {
+      round: 10 - words.length,
+      painter: nickname,
+    });
+    setTimeout(
+      () => io.to(id).emit(events.startPaint, { word, playerNum }),
+      events.time
+    );
   };
   const showResults = () => {
     console.log("게임끝~");
@@ -98,7 +105,7 @@ io.on("connection", (socket) => {
     players.push(player);
     io.emit(events.enterUser, { players });
     if (gamePlaying) {
-      socket.emit(events.startGame);
+      socket.emit(events.startRound);
       socket.emit(events.receiveTime, { roundTime });
     } else {
       checkNumOfPlayers();
@@ -130,7 +137,7 @@ io.on("connection", (socket) => {
         painter: painter.nickname,
         player: player.nickname,
       });
-      setTimeout(setRound, 4000);
+      setTimeout(setRound, events.time);
     }
   });
 
@@ -138,7 +145,7 @@ io.on("connection", (socket) => {
   socket.on(events.sendTime, ({ time }) => {
     if (time < 0) {
       io.emit(events.endRound, { word });
-      setTimeout(setRound, 4000);
+      setTimeout(setRound, events.time);
     } else {
       roundTime = time;
       broadcast(events.receiveTime, { time });
