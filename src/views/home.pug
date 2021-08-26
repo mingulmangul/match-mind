@@ -17,67 +17,49 @@ html(lang="en")
                         button.logout 나가기
         div
         main
+            div.notification.hidden
+                p
             div.login-box
                 form#loginForm
                     input(type="text" placeholder="What is your name?" required)
             div.game-container
                 div.players
                     ul.player-list
-                        li 
-                            div.player
-                                div.player__info
-                                    div.player__nickname
-                                        div Nick Name
-                                        div.nickname
-                                    div.player__grade A
-                                    div.player__score
-                                        span 정답
-                                        span.score 0
-                                div.player__avatar
-                                div.player__chat.hidden 
-                        li 
-                            div.player
-                                div.player__info
-                                    div.player__nickname
-                                        div Nick Name
-                                        div.nickname
-                                    div.player__grade
-                                    div.player__score
-                                        span 정답
-                                        span.score
-                                div.player__avatar
-                                div.player__chat.hidden 
-                        li 
-                            div.player
-                                div.player__info
-                                    div.player__nickname
-                                        div Nick Name
-                                        div.nickname
-                                    div.player__grade
-                                    div.player__score
-                                        span 정답
-                                        span.score
-                                div.player__avatar
-                                div.player__chat.hidden 
-                        li 
-                            div.player
-                                div.player__info
-                                    div.player__nickname
-                                        div Nick Name
-                                        div.nickname
-                                    div.player__grade
-                                    div.player__score
-                                        span 정답
-                                        span.score
-                                div.player__avatar
-                                div.player__chat.hidden 
+                        - for (var i=0; i<8; i++)
+                            li 
+                                if i % 2 === 0
+                                    div.player
+                                        div.player__info
+                                            div.player__nickname
+                                                div Nick Name
+                                                div.nickname
+                                            div.player__grade
+                                            div.player__score
+                                                span 정답
+                                                span.score
+                                        div.player__avatar
+                                        div.player__chat.hidden 
+                                else 
+                                    div.player.player--right
+                                        div.player__avatar
+                                        div.player__info
+                                            div.player__nickname
+                                                div Nick Name
+                                                div.nickname
+                                            div.player__grade
+                                            div.player__score
+                                                span 정답
+                                                span.score
+                                        div.player__chat.hidden 
                 div.paint 
                     span PAINT BOARD
                     div.paint__canvas
                         div.paint__word.hidden
                             span 문제
                             span#word
-                        canvas(width="700" height="420") 
+                        canvas(width="800" height="480") 
+                        div.results
+                            p
                     div.paint__controls 
                         div
                             div
@@ -100,61 +82,7 @@ html(lang="en")
                         div 
                             form.chat-form
                                 label(for="chat") CHATTING &sdot; &sdot;
-                                input(type="text" id="chat" maxLength="50")
-                div.players
-                    ul.player-list
-                        li 
-                            div.player
-                                div.player__avatar
-                                div.player__info
-                                    div.player__nickname
-                                        div Nick Name
-                                        div.nickname
-                                    div.player__grade
-                                    div.player__score
-                                        span 정답
-                                        span.score
-                                div.player__chat.player__chat--left.hidden 
-                        li 
-                            div.player
-                                div.player__avatar
-                                div.player__info
-                                    div.player__nickname
-                                        div Nick Name
-                                        div.nickname
-                                    div.player__grade
-                                    div.player__score
-                                        span 정답
-                                        span.score
-                                div.player__chat.player__chat--left.hidden 
-                        li 
-                            div.player
-                                div.player__avatar
-                                div.player__info
-                                    div.player__nickname
-                                        div Nick Name
-                                        div.nickname
-                                    div.player__grade
-                                    div.player__score
-                                        span 정답
-                                        span.score
-                                div.player__chat.player__chat--left.hidden 
-                        li 
-                            div.player
-                                div.player__avatar
-                                div.player__info
-                                    div.player__nickname
-                                        div Nick Name
-                                        div.nickname
-                                    div.player__grade
-                                    div.player__score
-                                        span 정답
-                                        span.score
-                                div.player__chat.player__chat--left.hidden 
-                div.results
-                    
-            div.notification.hidden
-                p
+                                input(type="text" id="chat" maxLength="50")       
         footer
         script.
             window.events = !{events}

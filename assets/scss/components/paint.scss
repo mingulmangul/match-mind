@@ -1,4 +1,8 @@
 .paint {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
   padding: 3px 25px;
   border-radius: 15px;
   background-color: $boardBlue;

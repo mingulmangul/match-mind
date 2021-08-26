@@ -25,15 +25,12 @@ font-family: 'Squada One', cursive;
   box-sizing: border-box;
   font-family: "Gothic A1", sans-serif;
 }
-
 button:focus {
   outline: none;
 }
-
 html {
   height: 100%;
 }
-
 body {
   background-color: $bgBlue;
   min-height: 100%;
@@ -56,12 +53,12 @@ body {
       background-color: white;
     }
     .game-container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      align-items: center;
-      justify-items: center;
+      display: block;
     }
   }
+}
+main {
+  position: relative;
 }
 
 .hidden {
