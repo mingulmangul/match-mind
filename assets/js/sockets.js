@@ -1,5 +1,5 @@
 import { handleSendMsg } from "./chat";
-import { handlePaintWord } from "./game";
+import { handleShowAnswer, handleStartPaint, handleStartRound } from "./game";
 import { handleFullUser, handleReadyGame } from "./notifications";
 import {
   handleFilledCanvas,
@@ -29,7 +29,9 @@ export const initSocket = (newSocket) => {
   // chat
   socket.on(events.sendMsg, handleSendMsg);
 
-  // game
+  // game;
   socket.on(events.readyGame, handleReadyGame);
-  socket.on(events.paintWord, handlePaintWord);
+  socket.on(events.startGame, handleStartRound);
+  socket.on(events.startPaint, handleStartPaint);
+  socket.on(events.showAnswer, handleShowAnswer);
 };

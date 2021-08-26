@@ -1,13 +1,12 @@
 import { getSocket } from "./sockets";
 
 const chatForm = document.querySelector(".chat-form");
+const input = chatForm.querySelector("input");
 
-const HIDDEN = "hidden";
+const HIDDEN_CLASS = "hidden";
+const DISABLED = "disabled";
 
 let msgTimer = null;
-
-export const handleSendMsg = ({ text, playerNum }) =>
-  showNewMsg(text, playerNum);
 
 const showNewMsg = (text, playerNum) => {
   const speaker = document.querySelector(
@@ -18,16 +17,26 @@ const showNewMsg = (text, playerNum) => {
   if (msgTimer) {
     clearTimeout(msgTimer);
   }
-  chatDiv.classList.remove(HIDDEN);
-  msgTimer = setTimeout(() => chatDiv.classList.add(HIDDEN), 4000);
+  chatDiv.classList.remove(HIDDEN_CLASS);
+  msgTimer = setTimeout(() => chatDiv.classList.add(HIDDEN_CLASS), 4000);
 };
 
 const handleChatSubmit = (event) => {
   event.preventDefault();
-  const input = chatForm.querySelector("input");
   const { value } = input;
   input.value = "";
   getSocket().emit(window.events.submitMsg, { text: value });
 };
+
+export const enableChat = () => {
+  input.removeAttribute(DISABLED);
+};
+
+export const disableChat = () => {
+  input.setAttribute(DISABLED, "");
+};
+
+export const handleSendMsg = ({ text, playerNum }) =>
+  showNewMsg(text, playerNum);
 
 chatForm.addEventListener("submit", handleChatSubmit);

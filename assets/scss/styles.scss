@@ -67,3 +67,9 @@ body {
 .hidden {
   display: none;
 }
+.disable {
+  opacity: 0;
+  * {
+    cursor: unset !important;
+  }
+}

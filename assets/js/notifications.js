@@ -17,7 +17,6 @@ const startCountTimer = () => {
   if (count < 1) {
     notification.classList.add(HIDDEN);
     clearInterval(countTimer);
-    getSocket().emit(window.events.startGame);
     return;
   }
   showNotification(`${count--}초 후에 게임이 시작됩니다.`);

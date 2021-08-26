@@ -12,26 +12,19 @@ const playerRooms = new Array(MAX_PLAYERS);
 let gamePlaying = false;
 let beforePainterNum = null;
 let words = null;
+let word = null;
 
 const selectPainter = () => {
-  players.forEach((player) => {
-    player.paint = false;
-    player.chat = true;
-  });
   let painterNum = Math.floor(Math.random() * players.length);
   if (painterNum === beforePainterNum) {
     painterNum = (painterNum + 1) % players.length;
   }
-  const painter = players[painterNum];
-  painter.paint = true;
-  painter.chat = false;
   beforePainterNum = painterNum;
+  const painter = players[painterNum];
+  return painter;
 };
 
 const selectWord = () => {
-  if (words.length === 0) {
-    return;
-  }
   const selected = words[Math.floor(Math.random() * words.length)];
   words = words.filter((word) => word != selected);
   return selected;
@@ -49,11 +42,24 @@ io.on("connection", (socket) => {
   const checkNumOfPlayers = () => {
     if (players.length >= 2) {
       gamePlaying = true;
+      words = selectWordList();
       io.emit(events.readyGame, { gamePlaying });
+      setTimeout(setRound, 5000);
     } else {
       gamePlaying = false;
       io.emit(events.readyGame, { gamePlaying });
     }
+  };
+  const setRound = () => {
+    if (words.length === 0) {
+      // 게임 종료
+      showResults();
+      return;
+    }
+    const { id } = selectPainter();
+    word = selectWord();
+    io.emit(events.startGame);
+    io.to(id).emit(events.startPaint, { word });
   };
   const showResults = () => {
     console.log("게임끝~");
@@ -71,58 +77,41 @@ io.on("connection", (socket) => {
     }
     playerRooms[playerNum] = true;
     const player = {
+      id: socket.id,
       playerNum,
       nickname,
       avatar: null,
       score: 0,
-      ready: false,
-      paint: gamePlaying ? false : true,
-      chat: gamePlaying ? false : true,
     };
     socket.playerInfo = player;
     players.push(player);
     io.emit(events.enterUser, { players });
+    if (gamePlaying) {
+      socket.emit(events.setNonPainter);
+    }
     checkNumOfPlayers();
   });
   socket.on(events.logoutUser, () => deleteUser());
 
   // paint
   socket.on(events.fillCanvas, ({ color }) => {
-    if (socket.playerInfo.paint) {
-      io.emit(events.filledCanvas, { color });
-    }
+    broadcast(events.filledCanvas, { color });
   });
   socket.on(events.sendPath, ({ x, y }) => {
-    if (socket.playerInfo.paint) {
-      io.emit(events.receivePath, { x, y });
-    }
+    broadcast(events.receivePath, { x, y });
   });
   socket.on(events.sendStroke, ({ x, y, color }) => {
-    if (socket.playerInfo.paint) {
-      io.emit(events.receiveStroke, { x, y, color });
-    }
+    broadcast(events.receiveStroke, { x, y, color });
   });
 
   // chat
   socket.on(events.submitMsg, ({ text }) => {
-    if (socket.playerInfo.chat) {
-      io.emit(events.sendMsg, { text, playerNum: socket.playerInfo.playerNum });
-    }
+    io.emit(events.sendMsg, { text, playerNum: socket.playerInfo.playerNum });
   });
 
   // game
-  socket.on(events.startGame, () => {
-    selectPainter();
-    words = selectWordList();
-    const word = selectWord();
-    io.emit(events.paintWord, { word });
-  });
-  socket.on(events.startNewRound, () => {
-    selectPainter();
-    const word = selectWord();
-    if (!word) {
-      showResults();
-    }
+  socket.on(events.startRound, () => {
+    io.emit(events.showAnswer, { word });
   });
 });
 

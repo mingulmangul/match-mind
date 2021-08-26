@@ -2,6 +2,7 @@ import iro from "@jaames/iro";
 import html2canvas from "html2canvas";
 import { getSocket } from "./sockets";
 
+const controls = document.querySelector(".paint__controls");
 const currentColor = document.querySelector(".color--current");
 const blackBtn = document.querySelector(".color--black");
 const whiteBtn = document.querySelector(".color--white");
@@ -13,6 +14,7 @@ const ctx = canvas.getContext("2d");
 
 const BLACK = "#031b29";
 const WHITE = "#f2f2eb";
+const DISABLE_CLASS = "disable";
 
 ctx.strokeStyle = BLACK;
 ctx.fillStyle = BLACK;
@@ -60,8 +62,10 @@ const handleMouseMove = (event) => {
   const x = event.offsetX;
   const y = event.offsetY;
   if (!painting) {
+    showPath(x, y);
     getSocket().emit(window.events.sendPath, { x, y });
   } else {
+    showStroke(x, y);
     getSocket().emit(window.events.sendStroke, {
       x,
       y,
@@ -72,6 +76,7 @@ const handleMouseMove = (event) => {
 
 const handleMouseDown = () => {
   if (filling) {
+    fill();
     getSocket().emit(window.events.fillCanvas, {
       color: getCurrentColor(),
     });
@@ -102,24 +107,41 @@ const handleSaveBtnClick = () => {
 };
 
 const handleEraserBtnClick = () => {
+  fill(WHITE);
   getSocket().emit(window.events.fillCanvas, {
     color: WHITE,
   });
 };
 
-export const handleReceivePath = ({ x, y }) => showPath(x, y);
-
-export const handleReceiveStroke = ({ x, y, color }) => showStroke(x, y, color);
-
-export const handleFilledCanvas = ({ color }) => fill(color);
-
-if (canvas) {
+export const enableCanvas = () => {
   canvas.addEventListener("mousemove", handleMouseMove);
   canvas.addEventListener("mousedown", handleMouseDown);
   canvas.addEventListener("mouseup", stopPainting);
   canvas.addEventListener("mouseleave", stopPainting);
-  canvas.addEventListener("contextmenu", handleCanvasCM);
+  blackBtn.addEventListener("click", handleColorChange);
+  whiteBtn.addEventListener("click", handleColorChange);
+  fillBtn.addEventListener("click", handleFillBtnClick);
+  eraserBtn.addEventListener("click", handleEraserBtnClick);
+  controls.classList.remove(DISABLE_CLASS);
+};
 
+export const disableCanvas = () => {
+  canvas.removeEventListener("mousemove", handleMouseMove);
+  canvas.removeEventListener("mousedown", handleMouseDown);
+  canvas.removeEventListener("mouseup", stopPainting);
+  canvas.removeEventListener("mouseleave", stopPainting);
+  blackBtn.removeEventListener("click", handleColorChange);
+  whiteBtn.removeEventListener("click", handleColorChange);
+  fillBtn.removeEventListener("click", handleFillBtnClick);
+  eraserBtn.removeEventListener("click", handleEraserBtnClick);
+  controls.classList.add(DISABLE_CLASS);
+};
+
+export const handleReceivePath = ({ x, y }) => showPath(x, y);
+export const handleReceiveStroke = ({ x, y, color }) => showStroke(x, y, color);
+export const handleFilledCanvas = ({ color }) => fill(color);
+
+if (canvas) {
   const colorPicker = new iro.ColorPicker(".color-picker", {
     width: 200,
     color: "rgb(255, 0, 0)",
@@ -135,9 +157,7 @@ if (canvas) {
   colorPicker.on("color:change", handleColorChange);
 
   setCurrentColor(BLACK);
-  blackBtn.addEventListener("click", handleColorChange);
-  whiteBtn.addEventListener("click", handleColorChange);
-  fillBtn.addEventListener("click", handleFillBtnClick);
+  enableCanvas();
+  canvas.addEventListener("contextmenu", handleCanvasCM);
   saveBtn.addEventListener("click", handleSaveBtnClick);
-  eraserBtn.addEventListener("click", handleEraserBtnClick);
 }

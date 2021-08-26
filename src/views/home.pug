@@ -19,7 +19,7 @@ html(lang="en")
         main
             div.login-box
                 form#loginForm
-                    input(type="text" placeholder="What is your name?")
+                    input(type="text" placeholder="What is your name?" required)
             div.game-container
                 div.players
                     ul.player-list
@@ -74,7 +74,7 @@ html(lang="en")
                 div.paint 
                     span PAINT BOARD
                     div.paint__canvas
-                        div.paint__word
+                        div.paint__word.hidden
                             span 문제
                             span#word
                         canvas(width="700" height="420") 
@@ -151,6 +151,8 @@ html(lang="en")
                                         span 정답
                                         span.score
                                 div.player__chat.player__chat--left.hidden 
+                div.results
+                    
             div.notification.hidden
                 p
         footer
