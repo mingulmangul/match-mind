@@ -1,5 +1,6 @@
 import { disableChat, enableChat } from "./chat";
 import { disableCanvas, enableCanvas, fill } from "./paint";
+import { highLightPainter } from "./players";
 import { getSocket } from "./sockets";
 
 const chatDivs = document.querySelectorAll(".player__chat");
@@ -7,6 +8,10 @@ const wordDiv = document.querySelector(".paint__word");
 const wordSpan = wordDiv.querySelector("#word");
 const timer = document.querySelector(".timer__time");
 const timerTime = timer.querySelectorAll("span");
+const answerDiv = document.querySelector("#answer");
+const resultsDiv = document.querySelector(".results");
+const painterName = resultsDiv.querySelector("#painterName");
+const playerName = resultsDiv.querySelector("#playerName");
 
 const WHITE = "#f2f2eb";
 const HIDDEN_CLASS = "hidden";
@@ -25,36 +30,55 @@ const startRoundTimer = () => {
   if (roundTime < 0) {
     clearInterval(roundTimer);
   } else {
-    getSocket().emit(window.events.sendTime, { time: roundTime });
     setTimer(roundTime);
-    roundTime--;
   }
+  getSocket().emit(window.events.sendTime, { time: roundTime });
+  roundTime--;
 };
 
-export const resetPaint = () => {
+const resetTimer = () => {
   if (roundTimer) {
     clearInterval(roundTimer);
     timerTime[0].innerText = "0";
     timerTime[2].innerText = "00";
   }
-  wordDiv.classList.add(HIDDEN_CLASS);
+};
+
+export const resetPaint = () => {
+  resetTimer();
   fill(WHITE);
   chatDivs.forEach((chatDiv) => chatDiv.classList.add(HIDDEN_CLASS));
+  wordDiv.classList.add(HIDDEN_CLASS);
+  answerDiv.classList.add(HIDDEN_CLASS);
+  resultsDiv.classList.add(HIDDEN_CLASS);
 };
 
 export const handleStartRound = () => {
   disableCanvas();
-  enableChat();
   resetPaint();
 };
 
-export const handleStartPaint = ({ word }) => {
+export const handleStartPaint = ({ word, playerNum }) => {
+  highLightPainter(playerNum);
   enableCanvas();
   disableChat();
   wordDiv.classList.remove(HIDDEN_CLASS);
   wordSpan.innerText = word;
-  roundTime = 90;
+  roundTime = 30;
   roundTimer = setInterval(startRoundTimer, 1000);
 };
 
 export const handleReceiveTime = ({ time }) => setTimer(parseInt(time, 10));
+
+export const handleEndRound = ({ word, painter, player }) => {
+  disableCanvas();
+  enableChat();
+  resetTimer();
+  answerDiv.innerText = word;
+  answerDiv.classList.remove(HIDDEN_CLASS);
+  if (painter && player) {
+    painterName.innerText = painter;
+    playerName.innerText = player;
+  }
+  resultsDiv.classList.remove(HIDDEN_CLASS);
+};

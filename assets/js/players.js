@@ -27,3 +27,10 @@ const deletePlayer = (playerNum) => {
 
 export const handleEnterUser = ({ players }) => showPlayers(players);
 export const handleLeaveUser = ({ playerNum }) => deletePlayer(playerNum);
+
+export const highLightPainter = (playerNum) => {
+  const playerRoom = document.querySelector(
+    `.player[data-playerNum=\"${playerNum}\"]`
+  );
+  playerRoom.classList.add("painter");
+};

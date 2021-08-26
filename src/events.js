@@ -17,6 +17,7 @@ const events = {
   sendMsg: "sendMessage",
   submitMsg: "submitMessage",
   // game
+  endRound: "endRound",
   readyGame: "readyGame",
   receiveTime: "receiveTime",
   sendTime: "sendTime",

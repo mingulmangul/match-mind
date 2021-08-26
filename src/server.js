@@ -67,10 +67,10 @@ io.on("connection", (socket) => {
       showResults();
       return;
     }
-    const { id } = selectPainter();
+    const { id, playerNum } = selectPainter();
     word = selectWord();
     io.emit(events.startGame);
-    io.to(id).emit(events.startPaint, { word });
+    io.to(id).emit(events.startPaint, { word, playerNum });
   };
   const showResults = () => {
     console.log("게임끝~");
@@ -120,12 +120,29 @@ io.on("connection", (socket) => {
   // chat
   socket.on(events.submitMsg, ({ text }) => {
     io.emit(events.sendMsg, { text, playerNum: socket.playerInfo.playerNum });
+    if (text == word) {
+      const painter = players[beforePainterNum];
+      const player = socket.playerInfo;
+      painter.score++;
+      player.score++;
+      io.emit(events.endRound, {
+        word,
+        painter: painter.nickname,
+        player: player.nickname,
+      });
+      setTimeout(setRound, 4000);
+    }
   });
 
   // game
   socket.on(events.sendTime, ({ time }) => {
-    roundTime = time;
-    broadcast(events.receiveTime, { time });
+    if (time < 0) {
+      io.emit(events.endRound, { word });
+      setTimeout(setRound, 4000);
+    } else {
+      roundTime = time;
+      broadcast(events.receiveTime, { time });
+    }
   });
 });
 
