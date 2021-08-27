@@ -1,3 +1,21 @@
+.audio {
+  position: absolute;
+  top: 5px;
+  left: 10px;
+  button {
+    border: none;
+    padding: 5px;
+    background-color: transparent;
+    color: $white;
+    font-size: 18px;
+    &:focus,
+    &:hover {
+      outline: none;
+      cursor: pointer;
+    }
+  }
+}
+
 nav ul {
   padding-top: 20px;
   background: linear-gradient($pupleBlue 70%, rgba($pupleBlue, 0.7) 30%);
