@@ -161,13 +161,6 @@
       padding: 8px 5px;
       font-size: 16px;
       background-color: $buttonBlue;
-      &:last-child {
-        position: absolute;
-        right: 0;
-        border-radius: 5px;
-        padding: 5px 20px;
-        background-color: #3fa4f6;
-      }
     }
   }
 }

@@ -14,19 +14,15 @@ let beforePainterNum = -1;
 let words = null;
 let word = null;
 let roundTime = 0;
-let paintPoint = 10;
-let playPoint = 10;
+let paintPoint = 2;
+let playPoint = 4;
 
 let timer = null;
 
 const selectPainter = () => {
-  let painterNum = Math.floor(Math.random() * players.length);
-  if (painterNum === beforePainterNum) {
-    painterNum = (painterNum + 1) % players.length;
-  }
+  const painterNum = (beforePainterNum + 1) % players.length;
   beforePainterNum = painterNum;
-  const painter = players[painterNum];
-  return painter;
+  return players[painterNum];
 };
 
 const selectWord = () => {
@@ -43,6 +39,9 @@ io.on("connection", (socket) => {
     players = players.filter((player) => player.playerNum != playerNum);
     io.emit(events.leaveUser, { playerNum });
     checkNumOfPlayers();
+    if (gamePlaying && playerNum === beforePainterNum) {
+      setRound();
+    }
   };
   const checkNumOfPlayers = () => {
     if (timer) {
@@ -70,12 +69,14 @@ io.on("connection", (socket) => {
       showResults();
       return;
     }
+    paintPoint = 2;
+    playPoint = 4;
     const { id, playerNum, nickname } = selectPainter();
     word = selectWord();
     io.emit(events.startRound, { painterNum: playerNum });
     io.emit(events.showPainter, {
       round: 10 - words.length,
-      painter: nickname,
+      painterName: nickname,
     });
     timer = setTimeout(
       () => io.to(id).emit(events.startPaint, { word }),
@@ -83,8 +84,9 @@ io.on("connection", (socket) => {
     );
   };
   const showResults = () => {
-    io.emit(events.showRank, { players, beforePainterNum });
+    io.emit(events.showRank, { players });
     gamePlaying = false;
+    beforePainterNum = -1;
     for (const player of players) {
       player.answer = 0;
       player.score = 0;
@@ -148,7 +150,7 @@ io.on("connection", (socket) => {
         word,
         painter,
         paintPoint,
-        playerNickname: player.nickname,
+        player,
         playPoint,
       });
       timer = setTimeout(setRound, events.time);
@@ -157,7 +159,12 @@ io.on("connection", (socket) => {
 
   // game
   socket.on(events.sendTime, ({ time }) => {
-    if (time < 0) {
+    if (time == 70 || time == 60 || time == 50) {
+      paintPoint += 2;
+      playPoint += 2;
+    } else if (time == 40) {
+      paintPoint += 2;
+    } else if (time < 0) {
       const painter = players[beforePainterNum];
       painter.score++;
       io.emit(events.endRound, { word, painter, paintPoint: 1 });

@@ -1,3 +1,8 @@
+const PAINTER_CLASS = "painter";
+
+const findPlayerRoom = (playerNum) =>
+  document.querySelector(`.player[data-playerNum=\"${playerNum}\"]`);
+
 const showPlayers = (players) => {
   const playerRooms = document.querySelectorAll(".player");
   players.forEach((player) => {
@@ -14,9 +19,7 @@ const showPlayers = (players) => {
 };
 
 const deletePlayer = (playerNum) => {
-  const playerRoom = document.querySelector(
-    `.player[data-playerNum=\"${playerNum}\"]`
-  );
+  const playerRoom = findPlayerRoom(playerNum);
   const nicknamediv = playerRoom.querySelector(".nickname");
   nicknamediv.innerText = "";
   const grade = playerRoom.querySelector(".player__grade");
@@ -28,9 +31,18 @@ const deletePlayer = (playerNum) => {
 export const handleEnterUser = ({ players }) => showPlayers(players);
 export const handleLeaveUser = ({ playerNum }) => deletePlayer(playerNum);
 
-export const highLightPainter = (playerNum) => {
-  const playerRoom = document.querySelector(
-    `.player[data-playerNum=\"${playerNum}\"]`
+export const highLightPainter = (playerNum) =>
+  findPlayerRoom(playerNum).classList.add(PAINTER_CLASS);
+
+export const removeHighLight = () => {
+  const painters = document.getElementsByClassName(PAINTER_CLASS);
+  Array.from(painters).forEach((painter) =>
+    painter.classList.remove(PAINTER_CLASS)
   );
-  playerRoom.classList.toggle("painter");
+};
+
+export const increaseAnswer = (playerNum, answer) => {
+  const playerRoom = findPlayerRoom(playerNum);
+  const answerDiv = playerRoom.querySelector(".score");
+  answerDiv.innerText = answer;
 };

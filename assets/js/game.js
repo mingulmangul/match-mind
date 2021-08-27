@@ -1,6 +1,6 @@
 import { disableChat, enableChat } from "./chat";
 import { disableCanvas, enableCanvas, fill } from "./paint";
-import { highLightPainter } from "./players";
+import { highLightPainter, increaseAnswer, removeHighLight } from "./players";
 import { getSocket } from "./sockets";
 
 const chatDivs = document.querySelectorAll(".player__chat");
@@ -54,6 +54,7 @@ const resetTimer = () => {
 };
 
 export const resetPaint = () => {
+  removeHighLight();
   enableCanvas();
   enableChat();
   resetTimer();
@@ -84,7 +85,7 @@ export const handleStartPaint = ({ word }) => {
   disableChat();
   wordDiv.classList.remove(HIDDEN_CLASS);
   wordSpan.innerText = word;
-  roundTime = 30;
+  roundTime = 80;
   roundTimer = setInterval(startRoundTimer, 1000);
 };
 
@@ -94,25 +95,31 @@ export const handleEndRound = ({
   word,
   painter,
   paintPoint,
-  playerNickname,
+  player,
   playPoint,
 }) => {
   disableCanvas();
   enableChat();
   resetTimer();
+  removeHighLight();
   answerDiv.innerText = word;
   answerDiv.classList.remove(HIDDEN_CLASS);
-  highLightPainter(painter.playerNum);
   painterName.innerText = painter.nickname;
   painterPoint.innerText = paintPoint;
-  playerName.innerText = playerNickname ? playerNickname : " ";
-  playerPoint.innerText = playPoint ? playPoint : " ";
+  if (player) {
+    increaseAnswer(player.playerNum, player.answer);
+    playerName.innerText = player.nickname;
+    playerPoint.innerText = playPoint;
+  } else {
+    playerName.innerText = " ";
+    playerPoint.innerText = " ";
+  }
   roundResultsDiv.classList.remove(HIDDEN_CLASS);
 };
 
-export const handleShowPainter = ({ round, painter }) => {
+export const handleShowPainter = ({ round, painterName }) => {
   roundNum.innerText = round;
-  nextPainterName.innerText = painter;
+  nextPainterName.innerText = painterName;
   roundReadyDiv.classList.remove(HIDDEN_CLASS);
   setTimeout(
     () => roundReadyDiv.classList.add(HIDDEN_CLASS),
@@ -120,10 +127,9 @@ export const handleShowPainter = ({ round, painter }) => {
   );
 };
 
-export const handleShowRank = ({ players, beforePainterNum }) => {
+export const handleShowRank = ({ players }) => {
   resetPaint();
-  highLightPainter(beforePainterNum);
-  players.sort((player1, player2) => player2.score - player1.score);
+  players.sort((player1, player2) => player2.answer - player1.answer);
   for (let i = 0; i < players.length; i++) {
     rankersName[i].innerText = players[i].nickname;
     rankersAnswer[i].innerText = players[i].answer;
