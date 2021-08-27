@@ -4,6 +4,7 @@
   "description": "Catch Mind(Realtime Drawing Game) Clone built with SocketIO, Gulp and Node",
   "main": "index.js",
   "scripts": {
+    "start": "node src/server.js",
     "dev:server": "nodemon --exec babel-node ./src/server.js --ignore assets/ --ignore src/static",
     "dev:assets": "gulp"
   },

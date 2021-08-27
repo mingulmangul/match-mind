@@ -175,5 +175,3 @@ io.on("connection", (socket) => {
     }
   });
 });
-
-// setInterval(() => console.log(players, players.length), 4000);
