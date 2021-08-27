@@ -32,5 +32,5 @@ export const highLightPainter = (playerNum) => {
   const playerRoom = document.querySelector(
     `.player[data-playerNum=\"${playerNum}\"]`
   );
-  playerRoom.classList.add("painter");
+  playerRoom.classList.toggle("painter");
 };

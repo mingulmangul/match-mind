@@ -12,6 +12,8 @@ const answerDiv = document.querySelector("#answer");
 const roundResultsDiv = document.querySelector(".round-results");
 const painterName = document.querySelector("#painterName");
 const playerName = document.querySelector("#playerName");
+const painterPoint = document.querySelector("#painterPoint");
+const playerPoint = document.querySelector("#playerPoint");
 const roundReadyDiv = document.querySelector(".round-ready");
 const roundNum = document.querySelector("#round");
 const nextPainterName = document.querySelector("#nextPainter");
@@ -52,6 +54,8 @@ const resetTimer = () => {
 };
 
 export const resetPaint = () => {
+  enableCanvas();
+  enableChat();
   resetTimer();
   fill(WHITE);
   chatDivs.forEach((chatDiv) => chatDiv.classList.add(HIDDEN_CLASS));
@@ -60,13 +64,22 @@ export const resetPaint = () => {
   roundResultsDiv.classList.add(HIDDEN_CLASS);
 };
 
-export const handleStartRound = () => {
-  disableCanvas();
-  resetPaint();
+const resetRank = () => {
+  for (let i = 0; i < 8; i++) {
+    rankersName[i].innerText = " ";
+    rankersAnswer[i].innerText = " ";
+    rankersScore[i].innerText = " ";
+  }
+  rankDiv.classList.add(HIDDEN_CLASS);
 };
 
-export const handleStartPaint = ({ word, playerNum }) => {
-  highLightPainter(playerNum);
+export const handleStartRound = ({ painterNum }) => {
+  resetPaint();
+  disableCanvas();
+  highLightPainter(painterNum);
+};
+
+export const handleStartPaint = ({ word }) => {
   enableCanvas();
   disableChat();
   wordDiv.classList.remove(HIDDEN_CLASS);
@@ -77,16 +90,23 @@ export const handleStartPaint = ({ word, playerNum }) => {
 
 export const handleReceiveTime = ({ time }) => setTimer(parseInt(time, 10));
 
-export const handleEndRound = ({ word, painter, player }) => {
+export const handleEndRound = ({
+  word,
+  painter,
+  paintPoint,
+  playerNickname,
+  playPoint,
+}) => {
   disableCanvas();
   enableChat();
   resetTimer();
   answerDiv.innerText = word;
   answerDiv.classList.remove(HIDDEN_CLASS);
-  if (painter && player) {
-    painterName.innerText = painter;
-    playerName.innerText = player;
-  }
+  highLightPainter(painter.playerNum);
+  painterName.innerText = painter.nickname;
+  painterPoint.innerText = paintPoint;
+  playerName.innerText = playerNickname ? playerNickname : " ";
+  playerPoint.innerText = playPoint ? playPoint : " ";
   roundResultsDiv.classList.remove(HIDDEN_CLASS);
 };
 
@@ -100,13 +120,15 @@ export const handleShowPainter = ({ round, painter }) => {
   );
 };
 
-export const handleShowRank = ({ player }) => {
-  player.sort((player1, player2) => player2.score - player1.score);
-  for (let i = 0; i < player.length; i++) {
-    rankersName[i].innerText = player[i].nickname;
-    rankersAnswer[i].innerText = player[i].answer;
-    rankersScore[i].innerText = player[i].score;
+export const handleShowRank = ({ players, beforePainterNum }) => {
+  resetPaint();
+  highLightPainter(beforePainterNum);
+  players.sort((player1, player2) => player2.score - player1.score);
+  for (let i = 0; i < players.length; i++) {
+    rankersName[i].innerText = players[i].nickname;
+    rankersAnswer[i].innerText = players[i].answer;
+    rankersScore[i].innerText = players[i].score;
   }
   rankDiv.classList.remove(HIDDEN_CLASS);
-  setTimeout(() => rankDiv.classList.add(HIDDEN_CLASS), 6000);
+  setTimeout(resetRank, 6000);
 };

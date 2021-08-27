@@ -59,8 +59,9 @@ io.on("connection", (socket) => {
         setRound();
       }, 6000);
     } else {
-      gamePlaying = false;
-      showResults();
+      if (gamePlaying) {
+        showResults();
+      }
       io.emit(events.readyGame, { gamePlaying });
     }
   };
@@ -71,19 +72,23 @@ io.on("connection", (socket) => {
     }
     const { id, playerNum, nickname } = selectPainter();
     word = selectWord();
-    io.emit(events.startRound);
+    io.emit(events.startRound, { painterNum: playerNum });
     io.emit(events.showPainter, {
       round: 10 - words.length,
       painter: nickname,
     });
     timer = setTimeout(
-      () => io.to(id).emit(events.startPaint, { word, playerNum }),
+      () => io.to(id).emit(events.startPaint, { word }),
       events.time
     );
   };
   const showResults = () => {
-    io.emit(events.showRank, { players });
+    io.emit(events.showRank, { players, beforePainterNum });
     gamePlaying = false;
+    for (const player of players) {
+      player.answer = 0;
+      player.score = 0;
+    }
     setTimeout(checkNumOfPlayers, 6000);
   };
 
@@ -110,7 +115,7 @@ io.on("connection", (socket) => {
     players.push(player);
     io.emit(events.enterUser, { players });
     if (gamePlaying) {
-      socket.emit(events.startRound);
+      socket.emit(events.startRound, { painterNum: beforePainterNum });
       socket.emit(events.receiveTime, { roundTime });
     } else {
       checkNumOfPlayers();
@@ -141,9 +146,9 @@ io.on("connection", (socket) => {
       player.score += playPoint;
       io.emit(events.endRound, {
         word,
-        painter: painter.nickname,
+        painter,
         paintPoint,
-        player: player.nickname,
+        playerNickname: player.nickname,
         playPoint,
       });
       timer = setTimeout(setRound, events.time);
@@ -153,7 +158,9 @@ io.on("connection", (socket) => {
   // game
   socket.on(events.sendTime, ({ time }) => {
     if (time < 0) {
-      io.emit(events.endRound, { word });
+      const painter = players[beforePainterNum];
+      painter.score++;
+      io.emit(events.endRound, { word, painter, paintPoint: 1 });
       timer = setTimeout(setRound, events.time);
     } else {
       roundTime = time;

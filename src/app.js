@@ -3,7 +3,7 @@ import express from "express";
 import logger from "morgan";
 import events from "./events";
 
-const PORT = 4000;
+const PORT = 8000;
 
 const app = express();
 
