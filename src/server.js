@@ -3,6 +3,7 @@ import express from "express";
 import logger from "morgan";
 import socketIO from "socket.io";
 import events from "./events";
+import socketController from "./socketController";
 
 const PORT = process.env.PORT || 4000;
 
