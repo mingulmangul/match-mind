@@ -23,7 +23,6 @@ const events = {
   readyGame: "readyGame",
   receiveTime: "receiveTime",
   sendTime: "sendTime",
-  showAnswer: "showAnswer",
   showPainter: "showPainter",
   showRank: "showRank",
   startRound: "startRound",

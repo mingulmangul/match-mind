@@ -4,9 +4,12 @@
   "description": "Catch Mind(Realtime Drawing Game) Clone built with SocketIO, Gulp and Node",
   "main": "index.js",
   "scripts": {
-    "start": "node src/server.js",
-    "dev:server": "nodemon --exec babel-node ./src/server.js --ignore assets/ --ignore src/static",
-    "dev:assets": "gulp"
+    "start": "node build/server.js",
+    "build": "npm run build:server && npm run build:assets",
+    "build:server": "babel src -d build",
+    "build:assets": "webpack --mode=production",
+    "dev:server": "nodemon --exec babel-node ./src/server.js --ignore src/client --ignore static",
+    "dev:assets": "webpack --mode=development -w"
   },
   "repository": {
     "type": "git",
@@ -26,23 +29,18 @@
     "socket.io": "^4.1.3"
   },
   "devDependencies": {
+    "@babel/cli": "^7.14.8",
     "@babel/core": "^7.15.0",
     "@babel/node": "^7.14.9",
     "@babel/preset-env": "^7.15.0",
-    "babelify": "^10.0.0",
-    "del": "^6.0.0",
-    "eslint": "^7.32.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^3.4.1",
-    "gulp": "^4.0.2",
-    "gulp-autoprefixer": "^8.0.0",
-    "gulp-bro": "^2.0.0",
-    "gulp-csso": "^4.0.1",
-    "gulp-sass": "^5.0.0",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^6.2.0",
+    "mini-css-extract-plugin": "^2.2.0",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.12",
-    "prettier": "^2.3.2",
-    "sass": "^1.38.1",
-    "uglifyify": "^5.0.2"
+    "sass": "^1.38.2",
+    "sass-loader": "^12.1.0",
+    "webpack": "^5.51.1",
+    "webpack-cli": "^4.8.0"
   }
 }

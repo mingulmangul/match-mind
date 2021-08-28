@@ -2,7 +2,6 @@ import { handleSendMsg } from "./chat";
 import {
   handleEndRound,
   handleReceiveTime,
-  handleShowAnswer,
   handleShowPainter,
   handleShowRank,
   handleStartPaint,
@@ -41,7 +40,6 @@ export const initSocket = (newSocket) => {
   socket.on(events.endRound, handleEndRound);
   socket.on(events.readyGame, handleReadyGame);
   socket.on(events.receiveTime, handleReceiveTime);
-  socket.on(events.showAnswer, handleShowAnswer);
   socket.on(events.showPainter, handleShowPainter);
   socket.on(events.showRank, handleShowRank);
   socket.on(events.startRound, handleStartRound);
